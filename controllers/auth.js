@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken') //to generate signed token
 const expressJwt = require('express-jwt') //for authorization check
-const {errorHandler, signupEH} = require('../helpers/dbErrorHandler')
+const {errorHandler, signupEH, signupErrorHandler} = require('../helpers/dbErrorHandler')
 const { validationResult } = require('express-validator/check');
 const user = require('../models/user');
 const uid = require('../models/uid');
@@ -34,7 +34,6 @@ exports.uidById = (req, res, next, id) => {
 }
 
 exports.readUid = (req, res) => {
-    console.log(req.uid)
     return res.json(req.uid);
  }
 
@@ -48,7 +47,7 @@ exports.signup = (req,res) => {
     user.save((err, user)=> {
         if(err) {
             return res.status(400).json({
-                error: signupEH(err)
+                error: signupErrorHandler(err)
             })
         }
         user.salt = undefined
@@ -58,7 +57,7 @@ exports.signup = (req,res) => {
         });
     })
 }
-/* 
+
 exports.signin = (req, res) => {
     // find the user based on email
     const { email, password } = req.body;
@@ -80,8 +79,8 @@ exports.signin = (req, res) => {
         // persist the token as 't' in cookie with expiry date
         res.cookie('t', token, { expire: new Date() + 9999 });
         // return response with user and token to frontend client
-        const { _id, name, email, role } = user;
-        return res.json({ token, user: { _id, email, name, role } });
+        const { _id, name, email} = user;
+        return res.json({ token, user: { _id, name, email } });
     });
 };
 
@@ -105,12 +104,3 @@ exports.isAuth = (req, res, next) => {
         }
     next();
 }
-
-exports.isAdmin = (req, res, next) => {
-    if(req.profile.role === 0){
-        return res.status(403).json({
-            error:'Admin ressource! Access denied'
-        })
-    }
-    next()
-} */

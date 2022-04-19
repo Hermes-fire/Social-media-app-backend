@@ -10,11 +10,15 @@ const {userSignupValidator} = require('../validator')
 router.post('/createUID', createUid)
 router.get('/readUID/:uid', readUid)
 
-
 router.post('/signup', userSignupValidator, signup)
+
 router.post('/signin', signin)
+
 router.get('/signout', signout)
-router.get("/hello", requireSignin)
+
+router.get("/hello", requireSignin, (req,res)=>{
+    res.send('hello SignedIn user')
+})
 
 router.param('uid', uidById)
 
