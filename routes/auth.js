@@ -3,7 +3,7 @@ const router = express.Router()
 //const { check, validationResult } = require('express-validator/check');
 
 
-const {createUid, readUid, checkUid uidById, signup, signin, signout, requireSignin} = require('../controllers/auth')
+const {createUid, readUid, checkUid, uidById, signup, signin, signout, requireSignin} = require('../controllers/auth')
 const {userSignupValidator} = require('../validator')
 
 //check uid
