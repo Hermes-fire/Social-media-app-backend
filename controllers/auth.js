@@ -38,13 +38,13 @@ exports.readUid = (req, res) => {
  }
 
 exports.signup = (req,res) => {
-    uid.findById(req.body._id).exec((err, uid) => {
+    /* uid.findById(req.body._id).exec((err, uid) => {
         if(err || !uid || uid._id !== req.body._id || uid.email !== req.body.email) {
             return res.status(400).json({
                 error: 'Forbiden'
             })
         }
-    })
+    }) */
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -53,7 +53,7 @@ exports.signup = (req,res) => {
     user.save((err, user)=> {
         if(err) {
             return res.status(400).json({
-                error: signupErrorHandler(err)
+                error: err//signupErrorHandler(err)
             })
         }
         user.salt = undefined
