@@ -35,21 +35,49 @@ exports.uidById = (req, res, next, id) => {
 
 exports.readUid = (req, res) => {
     return res.json(req.uid);
- }
+}
+
+
+//checkid verify if user not already signedUp, if not it returns user info from nttdata database
+exports.checkUid = (req, res) => {
+    user.findById(req.uid._id).exec((err, user) => {
+        if(err){
+            return err
+        }else if(!user) {
+            return res.json(req.uid)
+        }
+        return res.json({
+            error: "User already signed up"
+        });
+    })
+}
 
 exports.signup = (req,res) => {
-    /* uid.findById(req.body._id).exec((err, uid) => {
-        if(err || !uid || uid._id !== req.body._id || uid.email !== req.body.email) {
-            return res.status(400).json({
+    uid.findById(req.body._id).exec((err, uid) => {
+        if(err || !uid || uid._id != req.body._id || uid.email != req.body.email){
+            return res.json({
                 error: 'Forbiden'
             })
         }
-    }) */
-    const errors = validationResult(req);
+        const user = new User(req.body)
+        console.log(user)
+        user.save((err, user)=> {
+            if(err) {
+                return res.status(400).json({
+                    error: err//signupErrorHandler(err)
+                })
+            }
+            user.salt = undefined
+            user.hashed_password = undefined
+            res.json({user});
+        })
+    })
+    /* const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
-    }
-    const user = new User(req.body)
+    } */
+    /* const user = new User(req.body)
+    console.log(user)
     user.save((err, user)=> {
         if(err) {
             return res.status(400).json({
@@ -61,7 +89,7 @@ exports.signup = (req,res) => {
         res.json({
             user
         });
-    })
+    }) */
 }
 
 exports.signin = (req, res) => {
