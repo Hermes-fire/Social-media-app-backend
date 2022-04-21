@@ -64,7 +64,7 @@ exports.signup = (req,res) => {
         user.save((err, user)=> {
             if(err) {
                 return res.status(400).json({
-                    error: err//signupErrorHandler(err)
+                    error: signupErrorHandler(err)
                 })
             }
             user.salt = undefined
@@ -76,20 +76,6 @@ exports.signup = (req,res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     } */
-    /* const user = new User(req.body)
-    console.log(user)
-    user.save((err, user)=> {
-        if(err) {
-            return res.status(400).json({
-                error: err//signupErrorHandler(err)
-            })
-        }
-        user.salt = undefined
-        user.hashed_password = undefined
-        res.json({
-            user
-        });
-    }) */
 }
 
 exports.signin = (req, res) => {
