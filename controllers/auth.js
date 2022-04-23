@@ -60,7 +60,6 @@ exports.signup = (req,res) => {
             })
         }
         const user = new User(req.body)
-        console.log(user)
         user.save((err, user)=> {
             if(err) {
                 return res.status(400).json({
@@ -77,7 +76,13 @@ exports.signup = (req,res) => {
         return res.status(400).json({ errors: errors.array() });
     } */
 }
-
+config = {
+    "secret": "some-secret-shit-goes-here",
+    "refreshTokenSecret": "some-secret-refresh-token-shit",
+    "port": 3000,
+    "tokenLife": 900,
+    "refreshTokenLife": 86400
+}
 exports.signin = (req, res) => {
     // find the user based on email
     const { email, password } = req.body;
@@ -95,19 +100,19 @@ exports.signin = (req, res) => {
             });
         }
         // generate a signed token with user id and secret
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET );
         // persist the token as 't' in cookie with expiry date
-        res.cookie('t', token, { expire: new Date() + 9999 });
+        //res.cookie('t', token, { expire: new Date() + 9999 });
         // return response with user and token to frontend client
         const { _id, name, email} = user;
         return res.json({ token, user: { _id, name, email } });
     });
 };
-
+/* 
 exports.signout = (req, res) => {
-    res.clearCookie('t')
+    //res.clearCookie('t')
     res.json({message: "Signout success"})
-}
+} */
 
 exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET,
