@@ -17,8 +17,11 @@ router.post('/signin', signin)
 
 //router.get('/signout', signout)
 
-router.get("/hello", requireSignin, (req,res)=>{
-    res.send('hello SignedIn user')
+router.get("/checkjwt", requireSignin, (req,res)=>{
+    res.json({
+        success: true,
+        msg: 'valid token'
+    })
 })
 
 router.param('uid', uidById)
