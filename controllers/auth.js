@@ -85,17 +85,16 @@ exports.signup = (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     } */
 };
-config = {
-  secret: "some-secret-shit-goes-here",
-  refreshTokenSecret: "some-secret-refresh-token-shit",
-  port: 3000,
-  tokenLife: 900,
-  refreshTokenLife: 86400,
-};
+// config = {
+//   secret: "some-secret-shit-goes-here",
+//   refreshTokenSecret: "some-secret-refresh-token-shit",
+//   port: 3000,
+//   tokenLife: 900,
+//   refreshTokenLife: 86400,
+// };
 
 // Store refresh tokens
 let refreshTokens = [];
-
 // Refresh token
 exports.refreshToken = (req, res) => {
   // take the refresh token from the user
@@ -116,9 +115,10 @@ exports.refreshToken = (req, res) => {
 
   //   Verify the refreshToken
   jwt.verify(refreshToken, variables.JWT_REFRESH_SECRET_KEY, (err, id) => {
+    // if there is an error
     err && console.log(err);
 
-    //  is ok
+    //  If it is ok
     // delete our refresh token from the Array
     refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 
@@ -162,8 +162,7 @@ exports.signin = (req, res) => {
     // Push the refreshToken in our Array
     refreshTokens.push(refreshToken);
 
-    res.header("auth-token", accessToken);
-    // return response with user and token to frontend client
+    // return response with user and accessToken, refreshToken to frontend client
 
     const { _id, name, email } = user;
     return res.json({
@@ -176,7 +175,8 @@ exports.signin = (req, res) => {
 
 // Sign out
 exports.signout = (req, res) => {
-  const refreshToken = req.body.token;
+  // Take refresh token
+  const refreshToken = req.body.refreshToken;
 
   // Delete refreshToken from the Array
   refreshTokens = refreshTokens.filter((token) => token !== refreshToken);

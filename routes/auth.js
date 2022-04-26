@@ -17,6 +17,22 @@ const {
 const { verifyToken } = require("../helpers/tokenFunctions");
 const { userSignupValidator } = require("../validator");
 
+router.get("/checkjwt", requireSignin, (req, res) => {
+  res.json({
+    success: true,
+    msg: "valid token",
+  });
+});
+
+// Verify token
+router.get("/verifytoken", verifyToken, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Token is valid",
+    id: req.id,
+  });
+});
+
 //check uid
 router.post("/createUID", createUid);
 router.get("/readUID/:uid", readUid);
@@ -26,7 +42,7 @@ router.post("/signup", userSignupValidator, signup);
 
 router.post("/signin", signin);
 
-router.post("/signout", verifyToken, signout);  
+router.post("/signout", verifyToken, signout);
 
 // use Verify token for authorization
 router.get("/hello", verifyToken, (req, res) => {

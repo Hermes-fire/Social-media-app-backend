@@ -9,16 +9,13 @@ exports.verifyToken = (req, res, next) => {
 
     // verify the token
     jwt.verify(accessToken, variables.JWT_SECRET_KEY, (err, user) => {
-      console.log("here");
       if (err) {
         return res.status(403).json({
           error: "Token is not valid!",
         });
       }
 
-      console.log("here");
-
-      req.user = user;
+      req.id = user._id;
       next();
     });
   } else {
@@ -31,7 +28,7 @@ exports.verifyToken = (req, res, next) => {
 // Generate accesstoken function
 exports.generateAccessToken = (id) => {
   return jwt.sign({ _id: id }, variables.JWT_SECRET_KEY, {
-    expiresIn: "30s",
+    expiresIn: "60s",
   });
 };
 
