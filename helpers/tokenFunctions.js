@@ -28,7 +28,7 @@ exports.verifyToken = (req, res, next) => {
 // Generate accesstoken function
 exports.generateAccessToken = (id) => {
   return jwt.sign({ _id: id }, variables.JWT_SECRET_KEY, {
-    expiresIn: "60s",
+    expiresIn: "1h",
   });
 };
 
