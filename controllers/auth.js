@@ -5,6 +5,12 @@ const {errorHandler, signupEH, signupErrorHandler} = require('../helpers/dbError
 const { validationResult } = require('express-validator/check');
 const user = require('../models/user');
 const uid = require('../models/uid');
+const Token = require('../models/token');
+const crypto = require('crypto')
+const sendEmail = require("../utils/email");
+const token = require('../models/token');
+
+
 
 
 exports.createUid = (req,res) => {
@@ -68,6 +74,21 @@ exports.signup = (req,res) => {
             }
             user.salt = undefined
             user.hashed_password = undefined
+            
+            const token = new Token({
+                userId: req.body._id,
+                token: crypto.randomBytes(32).toString('hex')
+            })
+            token.save((err, token)=> {
+                if(err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+                const message = `${process.env.BASE_URL}/user/verify/${user.id}/${token.token}`;
+                console.log(message)
+                sendEmail('amine.sadali@gmail.com', "Verify Email", message);
+            })
             res.json({user});
         })
     })
@@ -76,13 +97,67 @@ exports.signup = (req,res) => {
         return res.status(400).json({ errors: errors.array() });
     } */
 }
-config = {
-    "secret": "some-secret-shit-goes-here",
-    "refreshTokenSecret": "some-secret-refresh-token-shit",
-    "port": 3000,
-    "tokenLife": 900,
-    "refreshTokenLife": 86400
+
+exports.validate = (req, res) => {
+    user.findById(req.params.id).exec((err,user)=>{
+        if(err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if(user.verified){
+            return res.send('user already verified')
+        }
+        token.findOne({
+            userId: user._id,
+            token: req.params.token,
+          }).exec((err,token)=>{
+            if(err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            user.updateOne({ _id: user._id, verified: true }).exec((err,user)=>{
+                if(err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+                Token.findByIdAndRemove(token._id).exec((err)=>{
+                    if(err) {
+                        return res.status(400).json({
+                            error: err
+                        })
+                    }
+                    res.send("email verified sucessfully")
+                })
+            });
+          })
+    })
 }
+
+    /* try {
+      const user = await user.findOne({ _id: req.params.id });
+      console.log(user)
+      if (!user) return res.status(400).send("Invalid link");
+  
+      const token = await token.findOne({
+        userId: user._id,
+        token: req.params.token,
+      });
+      if (!token) return res.status(400).send("Invalid link");
+  
+      await user.updateOne({ _id: user._id, verified: true });
+      await token.findByIdAndRemove(token._id);
+  
+      res.send("email verified sucessfully");
+    } catch (error) {
+        res.json({
+            error: error
+        });
+    } 
+  }
+*/
 exports.signin = (req, res) => {
     // find the user based on email
     const { email, password } = req.body;
@@ -97,6 +172,11 @@ exports.signin = (req, res) => {
         if (!user.authenticate(password)) {
             return res.status(401).json({
                 error: 'Email and password dont match'
+            });
+        }
+        if (!user.verified) {
+            return res.status(401).json({
+                error: 'Please verify user'
             });
         }
         // generate a signed token with user id and secret
