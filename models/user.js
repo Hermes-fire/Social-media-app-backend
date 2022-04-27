@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema(
            required: true
        },
        salt: String,
+       verified: {
+        type: Boolean,
+        default: false,
+      },
    },
    { timestamps: true , _id: false }
 );

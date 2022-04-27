@@ -12,6 +12,7 @@ const {
   signout,
   requireSignin,
   refreshToken,
+  validate,
 } = require("../controllers/auth");
 
 const { verifyToken } = require("../helpers/tokenFunctions");
@@ -55,6 +56,9 @@ router.post("/refreshtoken", refreshToken);
 // router.get("/hello", requireSignin, (req,res)=>{
 //     res.send('hello SignedIn user')
 // })
+
+//email validation
+router.get("/verify/:id/:token", validate)
 
 router.param("uid", uidById);
 

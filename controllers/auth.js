@@ -11,6 +11,10 @@ const user = require("../models/user");
 const uid = require("../models/uid");
 const variables = require("../config/variables");
 const { json } = require("express/lib/response");
+const Token = require('../models/token');
+const crypto = require('crypto')
+const sendEmail = require("../helpers/email");
+
 
 const {
   generateAccessToken,
@@ -61,37 +65,85 @@ exports.checkUid = (req, res) => {
   });
 };
 
-exports.signup = (req, res) => {
+exports.signup = (req,res) => {
   uid.findById(req.body._id).exec((err, uid) => {
-    if (err || !uid || uid._id != req.body._id || uid.email != req.body.email) {
-      return res.json({
-        error: "Forbiden",
-      });
-    }
-    const user = new User(req.body);
-    user.save((err, user) => {
-      if (err) {
-        return res.status(400).json({
-          error: signupErrorHandler(err),
-        });
+      if(err || !uid || uid._id != req.body._id || uid.email != req.body.email){
+          return res.json({
+              error: 'Forbiden'
+          })
       }
-      user.salt = undefined;
-      user.hashed_password = undefined;
-      res.json({ user });
-    });
-  });
+      const user = new User(req.body)
+      user.save((err, user)=> {
+          if(err) {
+              return res.status(400).json({
+                  error: signupErrorHandler(err)
+              })
+          }
+          user.salt = undefined
+          user.hashed_password = undefined
+          
+          const token = new Token({
+              userId: req.body._id,
+              token: crypto.randomBytes(32).toString('hex')
+          })
+          token.save((err, token)=> {
+              if(err) {
+                  return res.status(400).json({
+                      error: err
+                  })
+              }
+              const message = `${process.env.BASE_URL}/verify/${user.id}/${token.token}`;
+              console.log(message)
+              sendEmail('amine.sadali@gmail.com', "Verify Email", message);//add to .env, remplace with variable email
+          })
+          res.json({user});
+      })
+  })
+}
+//email validation
+exports.validate = (req, res) => {
+  user.findById(req.params.id).exec((err,user)=>{
+      if(err) {
+          return res.status(400).json({
+              error: err
+          })
+      }
+      if(user.verified){
+          return res.send('user already verified')
+      }
+      Token.findOne({
+          userId: user._id,
+          token: req.params.token,
+        }).exec((err,token)=>{
+          if(err) {
+              return res.status(400).json({
+                  error: err
+              })
+          }
+          user.updateOne({ _id: user._id, verified: true }).exec((err,user)=>{
+              if(err) {
+                  return res.status(400).json({
+                      error: err
+                  })
+              }
+              Token.findByIdAndRemove(token._id).exec((err)=>{
+                  if(err) {
+                      return res.status(400).json({
+                          error: err
+                      })
+                  }
+                  res.send("email verified sucessfully")
+              })
+          });
+        })
+  })
+}
   /* const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     } */
-};
-// config = {
-//   secret: "some-secret-shit-goes-here",
-//   refreshTokenSecret: "some-secret-refresh-token-shit",
-//   port: 3000,
-//   tokenLife: 900,
-//   refreshTokenLife: 86400,
-// };
+
+
 
 // Store refresh tokens
 let refreshTokens = [];
@@ -153,6 +205,11 @@ exports.signin = (req, res) => {
         error: "Email and password dont match",
       });
     }
+    if (!user.verified) {
+      return res.status(401).json({
+          error: 'Please verify user'
+      });
+  }
     // generate a signed token with user id and secret
     const accessToken = generateAccessToken(user._id);
 
@@ -172,6 +229,7 @@ exports.signin = (req, res) => {
     });
   });
 };
+
 
 // Sign out
 exports.signout = (req, res) => {
@@ -204,3 +262,5 @@ exports.isAuth = (req, res, next) => {
   }
   next();
 };
+
+
