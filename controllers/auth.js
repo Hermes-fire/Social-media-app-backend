@@ -93,7 +93,6 @@ exports.signup = (req,res) => {
                   })
               }
               const message = `${process.env.BASE_URL}/verify/${user.id}/${token.token}`;
-              console.log(message)
               sendEmail('amine.sadali@gmail.com', "Verify Email", message);//add to .env, remplace with variable email
           })
           res.json({user});
