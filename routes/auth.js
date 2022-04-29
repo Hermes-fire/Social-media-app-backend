@@ -1,31 +1,32 @@
 const express = require("express");
 const router = express.Router();
 //const { check, validationResult } = require('express-validator/check');
-
 const {
-  createUid,
-  readUid,
-  checkUid,
-  uidById,
+  createSimUser,
+  readSimUser,
+  checkSimUser,
+  simUserById,
   signup,
   signin,
   signout,
-  requireSignin,
   refreshToken,
+  verifyToken,
   validate,
 } = require("../controllers/auth");
-
-const { verifyToken } = require("../helpers/tokenFunctions");
 const { userSignupValidator } = require("../validator");
 
-router.get("/checkjwt", requireSignin, (req, res) => {
-  res.json({
-    success: true,
-    msg: "valid token",
-  });
-});
+//user in simulation dababase
+router.post("/createsimuser", createSimUser);
+router.get("/readsimuser/:simuser", readSimUser);
+router.get("/checksimuser/:simuser", checkSimUser); // check if SimUser exist & not signedup
+router.param("simuser", simUserById);
 
-// Verify token
+//sign in/up/out
+router.post("/signup", userSignupValidator, signup);
+router.post("/signin", signin);
+router.post("/signout", verifyToken, signout);
+
+// Verify token validity
 router.get("/verifytoken", verifyToken, (req, res) => {
   res.status(200).json({
     success: true,
@@ -33,33 +34,12 @@ router.get("/verifytoken", verifyToken, (req, res) => {
     id: req.id,
   });
 });
-
-//check uid
-router.post("/createUID", createUid);
-router.get("/readUID/:uid", readUid);
-router.get("/checkUID/:uid", checkUid); // check if not already signedUp
-
-router.post("/signup", userSignupValidator, signup);
-
-router.post("/signin", signin);
-
-router.post("/signout", verifyToken, signout);
-
-// use Verify token for authorization
-router.get("/hello", verifyToken, (req, res) => {
-  res.send("hello SignedIn user");
-});
-
 // Refresh token endpoint
 router.post("/refreshtoken", refreshToken);
-
-// router.get("/hello", requireSignin, (req,res)=>{
-//     res.send('hello SignedIn user')
-// })
 
 //email validation
 router.get("/verify/:id/:token", validate)
 
-router.param("uid", uidById);
+
 
 module.exports = router;

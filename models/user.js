@@ -9,31 +9,37 @@ const userSchema = new mongoose.Schema(
             type: String,
             maxlength: 32,
         },
-       name: {
-           type: String,
-           trim: true,
-           required: true,
-           maxlength: 32
-       },
-       surname: {
-        type: String,
-        trim: true,
-       },//here
-       email: {
-           type: String,
-           trim: true,
-           required: true,
-           unique: true
-       },
-       hashed_password: {
-           type: String,
-           required: true
-       },
-       salt: String,
-       verified: {
-        type: Boolean,
-        default: false,
-      },
+        fname: {
+            type: String,
+            trim: true,
+            required: true,
+            maxlength: 32
+        },
+        lname: {
+         type: String,
+         trim: true,
+         required: true,
+         maxlength: 32
+         },
+        surname: {
+            type: String,
+            trim: true,
+        },//here
+        email: {
+            type: String,
+            trim: true,
+            required: true,
+            unique: true
+        },
+        hashed_password: {
+            type: String,
+            required: true
+        },
+        salt: String,
+        verified: {
+            type: Boolean,
+            default: false,
+        },
    },
    { timestamps: true , _id: false }
 );

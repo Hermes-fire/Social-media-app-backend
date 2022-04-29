@@ -1,12 +1,13 @@
 const nodemailer = require("nodemailer");
+const variables = require('../config/variables')
 
 const sendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: variables.MAILSERVICE,
       auth: {
-        user: 'aminenode@gmail.com',
-        pass: 'Amine@123',
+        user: variables.EMAIL,
+        pass: variables.PASS,
       },
       tls: {
           rejectUnauthorized: false,
@@ -14,7 +15,7 @@ const sendEmail = async (email, subject, text) => {
     });
 
     await transporter.sendMail({
-      from: 'aminenode@gmail.com',
+      from: variables.EMAIL,
       to: email,
       subject: subject,
       text: text,
