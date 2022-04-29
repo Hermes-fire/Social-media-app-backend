@@ -99,7 +99,7 @@ exports.validate = (req, res) => {
   User.findById(req.params.id).exec((err,user)=>{
       if(err) {
           return res.status(400).json({
-              error: 'here1'
+              error: err
           })
       }
       if(user.verified){
@@ -111,7 +111,7 @@ exports.validate = (req, res) => {
         }).exec((err,token)=>{
           if(err) {
               return res.status(400).json({
-                  error: 'here2'
+                  error: err
               })
           }
           User.updateOne({ _id: user._id, verified: true }).exec((err,user)=>{
@@ -123,7 +123,7 @@ exports.validate = (req, res) => {
               Token.findByIdAndRemove(token._id).exec((err)=>{
                   if(err) {
                       return res.status(400).json({
-                          error: 'here4'
+                          error: err
                       })
                   }
                   res.send("email verified sucessfully")
@@ -186,11 +186,11 @@ exports.signin = (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     // Push the refreshToken in our Array
     refreshTokens.push(refreshToken);
-    const { _id, name, email } = user;
+    const { _id, fname, lname, email } = user;
     return res.json({
       accessToken,
       refreshToken: refreshToken,
-      user: { _id, name, email },
+      user: { _id, fname, lname, email },
     });
   });
 };
