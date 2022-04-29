@@ -2,15 +2,9 @@ const SimUser = require("../models/simuser");
 const user = require("../models/user");
 const jwt = require("jsonwebtoken"); //to generate signed token
 const expressJwt = require("express-jwt"); //for authorization check
-const {
-  errorHandler,
-  signupEH,
-  signupErrorHandler,
-} = require("../helpers/dbErrorHandler");
-const { validationResult } = require("express-validator/check");
+const {signupErrorHandler} = require("../helpers/dbErrorHandler");
 const User = require("../models/user");
 const variables = require("../config/variables");
-const { json } = require("express/lib/response");
 const Token = require('../models/token');
 const crypto = require('crypto')
 const sendEmail = require("../helpers/email");

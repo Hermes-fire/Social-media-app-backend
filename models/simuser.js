@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
-const { v1: uuidv1} = require('uuid');
 
-//simulate a corporate 
-
+//simulate corporate database users
 const userSchema = new mongoose.Schema(
    {
        fname: {
