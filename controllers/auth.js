@@ -114,7 +114,8 @@ exports.validate = (req, res) => {
                   error: err
               })
           }
-          User.updateOne({ _id: user._id, verified: true }).exec((err,user)=>{
+          console.log(user._id)
+          User.updateOne({ _id: user._id }, {verified: true }).exec((err,user)=>{
               if(err) {
                   return res.status(400).json({
                       error: err
