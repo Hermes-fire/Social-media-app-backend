@@ -2,13 +2,12 @@ const SimUser = require("../models/simuser");
 const user = require("../models/user");
 const jwt = require("jsonwebtoken"); //to generate signed token
 const expressJwt = require("express-jwt"); //for authorization check
-const {signupErrorHandler} = require("../helpers/dbErrorHandler");
+const { signupErrorHandler } = require("../helpers/dbErrorHandler");
 const User = require("../models/user");
 const variables = require("../config/variables");
-const Token = require('../models/token');
-const crypto = require('crypto')
+const Token = require("../models/token");
+const crypto = require("crypto");
 const sendEmail = require("../helpers/email");
-
 
 const {
   generateAccessToken,
@@ -59,80 +58,87 @@ exports.checkSimUser = (req, res) => {
   });
 };
 
-exports.signup = (req,res) => {
+exports.signup = (req, res) => {
   SimUser.findById(req.body._id).exec((err, simUser) => {
-      if(err || !simUser || simUser._id != req.body._id || simUser.email != req.body.email){
-          return res.json({
-              error: 'Forbiden'
-          })
+    if (
+      err ||
+      !simUser ||
+      simUser._id != req.body._id ||
+      simUser.email != req.body.email
+    ) {
+      return res.json({
+        error: "Forbiden",
+      });
+    }
+    const user = new User(req.body);
+    user.save((err, user) => {
+      if (err) {
+        return res.status(400).json({
+          error: signupErrorHandler(err),
+        });
       }
-      const user = new User(req.body)
-      user.save((err, user)=> {
-          if(err) {
-              return res.status(400).json({
-                  error: signupErrorHandler(err)
-              })
-          }
-          user.salt = undefined
-          user.hashed_password = undefined
-          
-          const token = new Token({
-              userId: req.body._id,
-              token: crypto.randomBytes(32).toString('hex')
-          })
-          token.save((err, token)=> {
-              if(err) {
-                  return res.status(400).json({
-                      error: err
-                  })
-              }
-              const message = `${process.env.BASE_URL}/auth/verify/${user.id}/${token.token}`;
-              sendEmail('amine.sadali@gmail.com', "Verify Email", message);//add to .env, remplace with variable email
-          })
-          res.json({user});
-      })
-  })
-}
+      user.salt = undefined;
+      user.hashed_password = undefined;
+
+      const token = new Token({
+        userId: req.body._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      });
+      token.save((err, token) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+          });
+        }
+        const message = `${process.env.BASE_URL}/auth/verify/${user.id}/${token.token}`;
+        sendEmail("amine.sadali@gmail.com", "Verify Email", message); //add to .env, remplace with variable email
+      });
+      res.json({ user });
+    });
+  });
+};
 
 //email validation
 exports.validate = (req, res) => {
-  User.findById(req.params.id).exec((err,user)=>{
-      if(err) {
-          return res.status(400).json({
-              error: err
-          })
+  User.findById(req.params.id).exec((err, user) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    }
+    if (user.verified) {
+      return res.send("user already verified");
+    }
+    Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    }).exec((err, token) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
       }
-      if(user.verified){
-          return res.send('user already verified')
-      }
-      Token.findOne({
-          userId: user._id,
-          token: req.params.token,
-        }).exec((err,token)=>{
-          if(err) {
-              return res.status(400).json({
-                  error: err
-              })
+      console.log(user._id);
+      User.updateOne({ _id: user._id }, { verified: true }).exec(
+        (err, user) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
           }
-          console.log(user._id)
-          User.updateOne({ _id: user._id }, {verified: true }).exec((err,user)=>{
-              if(err) {
-                  return res.status(400).json({
-                      error: err
-                  })
-              }
-              Token.findByIdAndRemove(token._id).exec((err)=>{
-                  if(err) {
-                      return res.status(400).json({
-                          error: err
-                      })
-                  }
-                  res.send("email verified sucessfully")
-              })
+          Token.findByIdAndRemove(token._id).exec((err) => {
+            if (err) {
+              return res.status(400).json({
+                error: err,
+              });
+            }
+            res.send("email verified sucessfully");
           });
-        })
-  })
-}
+        }
+      );
+    });
+  });
+};
 
 // Store refresh tokens
 let refreshTokens = [];
@@ -178,9 +184,9 @@ exports.signin = (req, res) => {
     }
     if (!user.verified) {
       return res.status(401).json({
-          error: 'Please verify user'
+        error: "Please verify user",
       });
-  }
+    }
     // generate a signed token with user id and secret
     const accessToken = generateAccessToken(user._id);
     // Generate a refresh token
@@ -222,6 +228,3 @@ exports.verifyToken = (req, res, next) => {
     });
   }
 };
-
-
-

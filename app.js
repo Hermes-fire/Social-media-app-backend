@@ -7,7 +7,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const variables = require("./config/variables");
 const authRoutes = require("./routes/auth");
-
+const announcementRoutes = require("./routes/announcement.routes");
+const categoryRoutes = require("./routes/category.routes");
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
@@ -22,6 +23,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-//routes
+//=== routes ===
+// Auth
 app.use("/api/auth", authRoutes);
-
+// Announcement
+app.use("/api/auth", announcementRoutes);
+// Category
+app.use("/api/auth", categoryRoutes);
