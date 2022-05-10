@@ -14,21 +14,24 @@ const {
   generateRefreshToken,
 } = require("../helpers/tokenFunctions");
 
-exports.createSimUser = (req, res) => {
-  const simUser = new SimUser(req.body);
-  simUser.save((err, simUser) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
-      });
-    }
-    res.json({
-      simUser,
+exports.createSimUser = async (req, res) => {
+  if (!req.body?.fname || !req.body?.lname || !req.body?.email) {
+    return res.status(400).json({
+      error: "First name, Last name and Email are required",
     });
-  });
+  }
+  const simUser = new SimUser(req.body);
+  try {
+    const result = await simUser.save();
+    return res.status(201).json(result);
+  } catch (err) {
+    return res.status(400).json({
+      error: err,
+    });
+  }
 };
 
-exports.simUserById = (req, res, next, id) => {
+exports.simUserById = async (req, res, next, id) => {
   SimUser.findById(id).exec((err, simUser) => {
     if (err || !simUser) {
       return res.status(400).json({
