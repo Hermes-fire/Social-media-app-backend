@@ -23,6 +23,10 @@ const announcementSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    photo: {
+      data: Buffer,
+      contentType: String
+    },
     anIsAnonymous: {
       type: Boolean,
       default: false,
