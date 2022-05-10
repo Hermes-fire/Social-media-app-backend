@@ -1,32 +1,38 @@
 const Announcement = require("../models/announcement");
 
-exports.create = (req, res) => {
-  console.log("im here");
+exports.create = async (req, res) => {
+  if (
+    !req?.body?.userId ||
+    !req?.body?.categoryId ||
+    !req?.body?.anDescription
+  ) {
+    return res.status(400).json({
+      error: "User Id, Category Id and Description are required",
+    });
+  }
   const announcement = new Announcement(req.body);
-  announcement.save((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
-      });
-    }
-    res.json({ data });
-  });
+  try {
+    const result = await announcement.save();
+    // 201 created
+    res.status(201).json(result);
+  } catch (err) {
+    return res.status(400).json({
+      error: err,
+    });
+  }
 };
 
 // Get all announcements
-exports.getAllAnnouncements = (req, res) => {
+exports.getAllAnnouncements = async (req, res) => {
   // Sort by the last element
   let order = req.query.order ? req.query.order : "desc";
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
-  Announcement.find()
+  const announcement = await Announcement.find()
     .populate(["categoryId", "userId"])
-    .sort([[sortBy, order]])
-    .exec((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: errorHandler(err),
-        });
-      }
-      res.json(data);
+    .sort([[sortBy, order]]);
+  if (!announcement)
+    return res.status(204).json({
+      error: "No announcements found",
     });
+  res.json(announcement);
 };
