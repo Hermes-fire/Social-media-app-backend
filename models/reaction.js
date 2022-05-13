@@ -15,9 +15,10 @@ const reactionSchema = new Schema({
         min: 0,
         max: 5,
         required: true,
-    },
-    { timestamps: true }
-});
+    }
+},
+{ timestamps: true }
+);
 
 module.exports = mongoose.model("Reaction", reactionSchema);
 
