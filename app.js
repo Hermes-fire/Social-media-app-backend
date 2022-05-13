@@ -9,6 +9,8 @@ const variables = require("./config/variables");
 const authRoutes = require("./routes/auth");
 const announcementRoutes = require("./routes/announcement.routes");
 const categoryRoutes = require("./routes/category.routes");
+const commentRoutes = require("./routes/comment.routes")
+const reactionRoutes = require("./routes/reaction.routes")
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
@@ -28,5 +30,9 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 // Announcement
 app.use("/api", announcementRoutes);
-// Category
+// Post Category
 app.use("/api", categoryRoutes);
+// Comments
+app.use("/api/comment", commentRoutes);
+// Reactions
+app.use("/api/reaction", reactionRoutes);
