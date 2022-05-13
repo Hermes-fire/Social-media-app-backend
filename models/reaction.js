@@ -3,13 +3,11 @@ const Schema = mongoose.Schema;
 
 const reactionSchema = new Schema({
     userId: {
-        type: String,
-        maxlength: 32,
+        type: Schema.Types.ObjectId,
         required: true,
     },
     postId: {
-        type: String,
-        maxlength: 32,
+        type: Schema.Types.ObjectId,
         required: true,
     },
     reactionType: {
@@ -18,6 +16,7 @@ const reactionSchema = new Schema({
         max: 5,
         required: true,
     },
+    { timestamps: true }
 });
 
 module.exports = mongoose.model("Reaction", reactionSchema);

@@ -3,13 +3,11 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
     userId: {
-        type: String,
-        maxlength: 32,
+        type: Schema.Types.ObjectId,
         required: true,
     },
     postId: {
-        type: String,
-        maxlength: 32,
+        type: Schema.Types.ObjectId,
         required: true,
     },
     comment: {
@@ -18,6 +16,7 @@ const commentSchema = new Schema({
         required: true,
         trim: true,
     },
+    { timestamps: true }
 });
 
 module.exports = mongoose.model("Comment", commentSchema);
