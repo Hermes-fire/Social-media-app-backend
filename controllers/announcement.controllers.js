@@ -39,7 +39,9 @@ exports.getAllAnnouncements = async (req, res) => {
 
 //Get Announcement by Id middleware
 exports.getAnnoucementById = (req, res, next, id) => {
-  Announcement.findById(id).exec((err, announcement)=>{
+  Announcement.findById(id)
+    .populate('comments')
+    .exec((err, announcement)=>{
       if(err || !announcement) {
           return res.status(400).json({
               error: 'annoucement not found'
