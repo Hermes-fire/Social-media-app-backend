@@ -40,7 +40,7 @@ exports.getAllAnnouncements = async (req, res) => {
 //Get Announcement by Id middleware
 exports.getAnnoucementById = (req, res, next, id) => {
   Announcement.findById(id)
-    .populate('comments')
+    .populate('comments', '-postId -__v')
     .exec((err, announcement)=>{
       if(err || !announcement) {
           return res.status(400).json({
@@ -56,6 +56,7 @@ exports.readAnnouncement = (req, res) => {
   return res.json(req.announcement);
 };
 
-//add new comment
+//add new comment (check comment controller)
+
 
 
