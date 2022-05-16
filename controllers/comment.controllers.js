@@ -85,9 +85,15 @@ exports.removeComment = async (req, res) => {
       });
   }
   try{
+    const announcement = await Announcement.findOneAndUpdate(
+      {_id: req.comment.postId}, //filter
+      { $pull: {comments:req.comment._id}}, //update
+      {new: true} //option
+    )
     await Comment.remove({ _id: req.comment._id})
     return res.json({
-      msg: "removed"
+      msg: "removed",
+      announcement: announcement
     })
   } catch(err) {
   return res.status(400).json({

@@ -15,7 +15,6 @@ router.post("/update/:commentId", verifyToken, getCommentById, updateComment);
 //Delete
 router.delete('/remove/:commentId',verifyToken, getCommentById, removeComment)
 
-
 router.param('commentId', getCommentById)
 
 module.exports = router;
