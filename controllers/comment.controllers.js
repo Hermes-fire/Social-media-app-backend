@@ -35,13 +35,65 @@ exports.addComment = async (req, res) => {
   }
 }
 
-/* 
-exports.addComment = async (req, res) => {
-    let announcement = await Announcement.findOneAndUpdate({_id: "627fc8d030f3bc7fb084e36d"},
-                                  { $push:  {comments:"627fd6eb96eb5c881899ad43"}},
-                                  {new: true})
-    console.log(announcement);
-    res.status(201).json({announcement});
-} */
+
+exports.getCommentById = (req, res, next, id) => {
+  Comment.findById(id)
+    .exec((err, comment) => {
+      if(err || !comment) {
+          return res.status(400).json({
+              error: 'comment not found'
+          })
+      }
+      req.comment = comment 
+      next()
+  })
+}
+
+exports.readComment = (req, res) => {
+  return res.json(req.comment);
+};
+
+
+exports.updateComment = async (req, res) => {
+  const comment = new Comment(req.comment);
+  if(!req.body.comment){
+    return res.status(400).json({
+      error: 'please specify a comment',
+      });
+  }
+  //check if user own comment
+  if(req.id != req.comment.userId){
+    return res.status(400).json({
+      error: 'unauthorized',
+      });
+  }
+  try{
+    await comment.updateOne({comment: req.body.comment})
+    return res.json({
+      msg: "updated"
+    })
+  } catch(err) {
+  return res.status(400).json({
+  error: err,
+  });
+}}
+
+exports.removeComment = async (req, res) => {
+  if(req.id != req.comment.userId){
+    return res.status(400).json({
+      error: 'unauthorized',
+      });
+  }
+  try{
+    await Comment.remove({ _id: req.comment._id})
+    return res.json({
+      msg: "removed"
+    })
+  } catch(err) {
+  return res.status(400).json({
+  error: err,
+  });
+  }
+}
 
 
