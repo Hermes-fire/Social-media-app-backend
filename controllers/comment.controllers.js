@@ -101,5 +101,3 @@ exports.removeComment = async (req, res) => {
   });
   }
 }
-
-
