@@ -11,10 +11,8 @@ const reactionSchema = new Schema({
         required: true,
     },
     reactionType: {
-        type: Number,
-        min: 0,
-        max: 5,
-        required: true,
+        type: String,
+        enum: ['like', 'love', 'wow', 'haha', 'sad', 'angry'],
     }
 },
 { timestamps: true }

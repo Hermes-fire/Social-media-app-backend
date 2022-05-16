@@ -30,7 +30,11 @@ const announcementSchema = new mongoose.Schema(
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment'
-    }]
+    }],
+    reactions: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Reaction'
+    }],
   },
   { timestamps: true }
 );

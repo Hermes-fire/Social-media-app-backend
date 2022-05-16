@@ -41,6 +41,7 @@ exports.getAllAnnouncements = async (req, res) => {
 exports.getAnnoucementById = (req, res, next, id) => {
   Announcement.findById(id)
     .populate('comments', '-postId -__v')
+    .populate('reactions', '-postId -__v')
     .exec((err, announcement)=>{
       if(err || !announcement) {
           return res.status(400).json({
