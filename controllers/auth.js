@@ -196,11 +196,11 @@ exports.signin = (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     // Push the refreshToken in our Array
     refreshTokens.push(refreshToken);
-    const { _id, fname, lname, email } = user;
+    const { _id, fname, lname, email, profilePicture } = user;
     return res.json({
       accessToken,
       refreshToken: refreshToken,
-      user: { _id, fname, lname, email },
+      user: { _id, fname, lname, email, profilePicture },
     });
   });
 };
