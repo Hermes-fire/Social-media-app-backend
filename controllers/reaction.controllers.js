@@ -33,8 +33,6 @@ exports.addReaction = async (req, res) => {
   }
 }
 
-
-
 exports.getReactionById = (req, res, next, id) => {
   Reaction.findById(id)
     .exec((err, reaction) => {
@@ -51,7 +49,6 @@ exports.getReactionById = (req, res, next, id) => {
 exports.readReaction = (req, res) => {
   return res.json(req.reaction);
 };
-
 
 exports.updateReaction = async (req, res) => {
   const reaction = new Reaction(req.reaction);
@@ -79,14 +76,14 @@ exports.updateReaction = async (req, res) => {
 
 exports.removeReaction = async (req, res) => {
   if(req.id != req.reaction.userId){
-    return res.status(400).json({
+    return res.status(403).json({
       error: 'unauthorized',
       });
   }
   try{
     const announcement = await Announcement.findOneAndUpdate(
       {_id: req.reaction.postId}, //filter
-      { $pull: {comments:req.reaction._id}}, //update
+      { $pull: {reactions:req.reaction._id}}, //update
       {new: true} //option
     )
     await Reaction.remove({ _id: req.reaction._id})
