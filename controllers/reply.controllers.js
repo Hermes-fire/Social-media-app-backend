@@ -77,7 +77,7 @@ exports.updateReply = async (req, res) => {
 }}
 
 exports.removeReply = async (req, res) => {
-  if(req.id != req.reply.userId){ //test this condition with different user !!
+  if(req.id != req.reply.userId){
     return res.status(403).json({
       error: 'unauthorized',
       });
