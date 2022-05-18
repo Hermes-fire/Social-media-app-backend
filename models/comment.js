@@ -16,10 +16,10 @@ const commentSchema = new Schema({
         required: true,
         trim: true,
     },
-    replies: {
+    replies: [{
         type: Schema.Types.ObjectId,
-        ref: "Replie",
-    }
+        ref: "Reply",
+    }]
 },
 { timestamps: true }
 );
