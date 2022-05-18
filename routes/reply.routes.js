@@ -12,7 +12,7 @@ router.post("/addReply", verifyToken, addReply);
 //Read
 router.get("/read/:replyId", verifyToken, readReply);
 //Update
-router.post("/update/:replyId", verifyToken, updateReply);
+router.put("/update/:replyId", verifyToken, updateReply);
 //Delete
 router.delete('/remove/:replyId', verifyToken, removeReply);
 

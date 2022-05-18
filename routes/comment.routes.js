@@ -11,7 +11,7 @@ router.post("/addComment", verifyToken, addComment);
 //Read
 router.get("/read/:commentId", verifyToken, readComment);
 //Update
-router.post("/update/:commentId", verifyToken, updateComment);
+router.put("/update/:commentId", verifyToken, updateComment);
 //Delete
 router.delete('/remove/:commentId',verifyToken, removeComment)
 
