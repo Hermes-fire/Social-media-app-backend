@@ -34,5 +34,6 @@ app.use("/api", announcementRoutes);
 app.use("/api", categoryRoutes);
 // Comments
 app.use("/api/comment", commentRoutes);
+app.use("/api/comment/reply", )
 // Reactions
 app.use("/api/reaction", reactionRoutes);
