@@ -34,24 +34,24 @@ exports.addReply = async (req, res) => {
     });
   }
 }
-/* 
-exports.getReactionById = (req, res, next, id) => {
-  Reaction.findById(id)
-    .exec((err, reaction) => {
-      if(err || !reaction) {
+
+exports.getReplyById = (req, res, next, id) => {
+  Reply.findById(id)
+    .exec((err, reply) => {
+      if(err || !reply) {
           return res.status(400).json({
-              error: 'reaction not found'
+              error: 'reply not found'
           })
       }
-      req.reaction = reaction 
+      req.reply = reply 
       next()
   })
 }
 
-exports.readReaction = (req, res) => {
-  return res.json(req.reaction);
+exports.readReply = (req, res) => {
+  return res.json(req.reply);
 };
-
+/*
 exports.updateReaction = async (req, res) => {
   const reaction = new Reaction(req.reaction);
   if(!req.body.reaction){
