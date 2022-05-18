@@ -86,8 +86,8 @@ exports.removeReaction = async (req, res) => {
       { $pull: {reactions:req.reaction._id}}, //update
       {new: true} //option
     )
-    await Reaction.remove({ _id: req.reaction._id})
-    return res.json({
+    await Reaction.deleteOne({ _id: req.reaction._id})
+    return res.status(200).json({
       msg: "removed",
       announcement: announcement
     })

@@ -90,8 +90,8 @@ exports.removeComment = async (req, res) => {
       { $pull: {comments:req.comment._id}}, //update
       {new: true} //option
     )
-    await Comment.remove({ _id: req.comment._id})
-    return res.json({
+    await Comment.deleteOne({ _id: req.comment._id})
+    return res.status(200).json({
       msg: "removed",
       announcement: announcement
     })
