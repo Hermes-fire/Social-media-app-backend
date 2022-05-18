@@ -55,8 +55,15 @@ exports.getAnnoucementById = (req, res, next, id) => {
 exports.getAnnoucementByIdAndPopulate = (req, res, next, id) => {
   console.log('with')
   Announcement.findById(id)
-    .populate('comments', '-postId -__v')
-    .populate('reactions', '-postId -__v')
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'replies',
+        model: 'Reply'
+      }
+    })
+    /* .populate('comments', '-postId -__v')
+    .populate('reactions', '-postId -__v') */
     .exec((err, announcement)=>{
       if(err || !announcement) {
           return res.status(400).json({

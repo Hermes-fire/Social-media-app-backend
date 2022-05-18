@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { verifyToken } = require("../controllers/auth");
-const {create, addReply, getReplyById, readReply, updateReply} = require('../controllers/reply.controllers')
+const {create, addReply, getReplyById, readReply, updateReply, removeReply} = require('../controllers/reply.controllers')
 
 
 //----CRUD----
@@ -14,7 +14,7 @@ router.get("/read/:replyId", verifyToken, readReply);
 //Update
 router.post("/update/:replyId", verifyToken, updateReply);
 //Delete
-//router.delete('/remove/:replyId', verifyToken, removeReaction);
+router.delete('/remove/:replyId', verifyToken, removeReply);
 
 
 

@@ -75,27 +75,28 @@ exports.updateReply = async (req, res) => {
   error: err,
   });
 }}
-/*
-exports.removeReaction = async (req, res) => {
-  if(req.id != req.reaction.userId){
+
+exports.removeReply = async (req, res) => {
+  if(req.id != req.reply.userId){ //test this condition with different user !!
     return res.status(403).json({
       error: 'unauthorized',
       });
   }
   try{
-    const announcement = await Announcement.findOneAndUpdate(
-      {_id: req.reaction.postId}, //filter
-      { $pull: {reactions:req.reaction._id}}, //update
+    console.log(req.reply)
+    const comment = await Comment.findOneAndUpdate(
+      {_id: req.reply.commentId}, //filter
+      { $pull: {replies:req.reply._id}}, //update
       {new: true} //option
     )
-    await Reaction.deleteOne({ _id: req.reaction._id})
+    await Reply.deleteOne({ _id: req.reply._id})
     return res.status(200).json({
       msg: "removed",
-      announcement: announcement
+      comment: comment
     })
   } catch(err) {
   return res.status(400).json({
   error: err,
-  });
+  })
   }
-} */
+}
