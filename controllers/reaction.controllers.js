@@ -36,7 +36,7 @@ exports.addReaction = async (req, res) => {
 
 
 exports.getReactionById = (req, res, next, id) => {
-  Comment.findById(id)
+  Reaction.findById(id)
     .exec((err, reaction) => {
       if(err || !reaction) {
           return res.status(400).json({
@@ -55,19 +55,19 @@ exports.readReaction = (req, res) => {
 
 exports.updateReaction = async (req, res) => {
   const reaction = new Reaction(req.reaction);
-  if(!req.body.reactionType){
+  if(!req.body.reaction){
     return res.status(400).json({
       error: 'please specify a reaction',
       });
   }
   //check if user own comment
-  if(req.id != req.comment.userId){
-    return res.status(400).json({
+  if(req.id != req.reaction.userId){
+    return res.status(403).json({
       error: 'unauthorized',
       });
   }
   try{
-    await comment.updateOne({comment: req.body.comment})
+    await reaction.updateOne({reaction: req.body.reaction})
     return res.json({
       msg: "updated"
     })
@@ -77,19 +77,19 @@ exports.updateReaction = async (req, res) => {
   });
 }}
 
-exports.removeComment = async (req, res) => {
-  if(req.id != req.comment.userId){
+exports.removeReaction = async (req, res) => {
+  if(req.id != req.reaction.userId){
     return res.status(400).json({
       error: 'unauthorized',
       });
   }
   try{
     const announcement = await Announcement.findOneAndUpdate(
-      {_id: req.comment.postId}, //filter
-      { $pull: {comments:req.comment._id}}, //update
+      {_id: req.reaction.postId}, //filter
+      { $pull: {comments:req.reaction._id}}, //update
       {new: true} //option
     )
-    await Comment.remove({ _id: req.comment._id})
+    await Reaction.remove({ _id: req.reaction._id})
     return res.json({
       msg: "removed",
       announcement: announcement

@@ -63,7 +63,7 @@ exports.updateComment = async (req, res) => {
   }
   //check if user own comment
   if(req.id != req.comment.userId){
-    return res.status(400).json({
+    return res.status(403).json({
       error: 'unauthorized',
       });
   }
@@ -80,7 +80,7 @@ exports.updateComment = async (req, res) => {
 
 exports.removeComment = async (req, res) => {
   if(req.id != req.comment.userId){
-    return res.status(400).json({
+    return res.status(403).json({
       error: 'unauthorized',
       });
   }

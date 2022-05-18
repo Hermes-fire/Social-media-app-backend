@@ -10,9 +10,10 @@ const reactionSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
     },
-    reactionType: {
+    reaction: {
         type: String,
         enum: ['like', 'love', 'wow', 'haha', 'sad', 'angry'],
+        required: true,
     }
 },
 { timestamps: true }
