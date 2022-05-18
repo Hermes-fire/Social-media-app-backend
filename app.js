@@ -11,12 +11,13 @@ const announcementRoutes = require("./routes/announcement.routes");
 const categoryRoutes = require("./routes/category.routes");
 const commentRoutes = require("./routes/comment.routes")
 const reactionRoutes = require("./routes/reaction.routes")
+const replyRoutes = require("./routes/reply.routes")
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
 const port = variables.port || 8000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}, waiting db to connect`);
 });
 
 //middlewares
@@ -34,6 +35,6 @@ app.use("/api", announcementRoutes);
 app.use("/api", categoryRoutes);
 // Comments
 app.use("/api/comment", commentRoutes);
-app.use("/api/comment/reply", )
+app.use("/api/comment/reply", replyRoutes);
 // Reactions
 app.use("/api/reaction", reactionRoutes);
