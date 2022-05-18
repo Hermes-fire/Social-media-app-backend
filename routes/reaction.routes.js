@@ -9,11 +9,11 @@ const {create, addReaction, getReactionById, readReaction, updateReaction, remov
 router.post("/create", verifyToken, create);
 router.post("/addReaction", verifyToken, addReaction);
 //Read
-router.get("/read/:reactionId", verifyToken, getReactionById, readReaction);
+router.get("/read/:reactionId", verifyToken, readReaction);
 //Update
-router.post("/update/:reactionId", verifyToken, getReactionById, updateReaction);
+router.post("/update/:reactionId", verifyToken, updateReaction);
 //Delete
-router.delete('/remove/:reactionId',verifyToken, getReactionById, removeReaction);
+router.delete('/remove/:reactionId',verifyToken, removeReaction);
 
 router.param('reactionId', getReactionById)
 

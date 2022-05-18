@@ -9,11 +9,11 @@ const {create, addComment, getCommentById, readComment, updateComment, removeCom
 router.post("/create", verifyToken, create);
 router.post("/addComment", verifyToken, addComment);
 //Read
-router.get("/read/:commentId", verifyToken, getCommentById, readComment);
+router.get("/read/:commentId", verifyToken, readComment);
 //Update
-router.post("/update/:commentId", verifyToken, getCommentById, updateComment);
+router.post("/update/:commentId", verifyToken, updateComment);
 //Delete
-router.delete('/remove/:commentId',verifyToken, getCommentById, removeComment)
+router.delete('/remove/:commentId',verifyToken, removeComment)
 
 router.param('commentId', getCommentById)
 
