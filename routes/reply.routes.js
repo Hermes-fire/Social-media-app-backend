@@ -9,11 +9,10 @@ const {create, addReply, getReplyById, readReply, updateReply} = require('../con
 //Create
 router.post("/create", verifyToken, create);
 router.post("/addReply", verifyToken, addReply);
-
 //Read
 router.get("/read/:replyId", verifyToken, readReply);
 //Update
-//router.post("/update/:replyId", verifyToken, updateReply);
+router.post("/update/:replyId", verifyToken, updateReply);
 //Delete
 //router.delete('/remove/:replyId', verifyToken, removeReaction);
 

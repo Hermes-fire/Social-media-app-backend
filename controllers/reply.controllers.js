@@ -51,22 +51,22 @@ exports.getReplyById = (req, res, next, id) => {
 exports.readReply = (req, res) => {
   return res.json(req.reply);
 };
-/*
-exports.updateReaction = async (req, res) => {
-  const reaction = new Reaction(req.reaction);
-  if(!req.body.reaction){
+
+exports.updateReply = async (req, res) => {
+  const reply = new Reply(req.reply);
+  if(!req.body.reply){
     return res.status(400).json({
-      error: 'please specify a reaction',
+      error: 'please specify a reply',
       });
   }
   //check if user own comment
-  if(req.id != req.reaction.userId){
+  if(req.id != req.reply.userId){
     return res.status(403).json({
       error: 'unauthorized',
       });
   }
   try{
-    await reaction.updateOne({reaction: req.body.reaction})
+    await reply.updateOne({reply: req.body.reply})
     return res.json({
       msg: "updated"
     })
@@ -75,7 +75,7 @@ exports.updateReaction = async (req, res) => {
   error: err,
   });
 }}
-
+/*
 exports.removeReaction = async (req, res) => {
   if(req.id != req.reaction.userId){
     return res.status(403).json({
