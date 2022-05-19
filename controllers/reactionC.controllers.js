@@ -1,12 +1,12 @@
-const Reaction = require("../models/reaction");
-const Announcement = require("../models/announcement");
-
+const ReactionC = require("../models/reactionC")
+const Comment = require("../models/comment")
 
 exports.create = async (req, res) => {
     const reaction = new ReactionC(req.body);
     reaction.userId = req.id
     try {
-      const result = await reactionC.save();
+      const result = await reaction.save();
+      console.log(result+'heelo')
       res.status(201).json(result);
     } catch (err) {
       return res.status(400).json({
@@ -16,23 +16,23 @@ exports.create = async (req, res) => {
 };
 
 exports.addReaction = async (req, res) => {
-  const reaction = new Reaction(req.body);
+  const reaction = new ReactionC(req.body);
   reaction.userId = req.id
   try {
     const result = await reaction.save();
-    const announcement = await Announcement.findOneAndUpdate(
-                                              {_id: result.postId}, //filter
+    const comment = await Comment.findOneAndUpdate(
+                                              {_id: result.commentId}, //filter
                                               { $push: {reactions:result._id}}, //update
                                               {new: true} //option
                                           )
-    res.status(201).json({result,announcement});
+    res.status(201).json({result,comment});
   }catch(err) {
     return res.status(400).json({
     error: err,
     });
   }
 }
-
+/* 
 exports.getReactionById = (req, res, next, id) => {
   Reaction.findById(id)
     .exec((err, reaction) => {
@@ -96,4 +96,4 @@ exports.removeReaction = async (req, res) => {
   error: err,
   });
   }
-}
+} */

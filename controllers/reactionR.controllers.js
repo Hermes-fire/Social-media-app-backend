@@ -1,4 +1,4 @@
-const Reaction = require("../models/reaction");
+/* const Reaction = require("../models/reaction");
 const Announcement = require("../models/announcement");
 
 
@@ -96,4 +96,4 @@ exports.removeReaction = async (req, res) => {
   error: err,
   });
   }
-}
+} */

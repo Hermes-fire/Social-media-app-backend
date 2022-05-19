@@ -9,12 +9,13 @@ const {create, addReaction, getReactionById, readReaction, updateReaction, remov
 router.post("/create", verifyToken, create);
 router.post("/addReaction", verifyToken, addReaction);
 //Read
+/*
 router.get("/read/:reactionId", verifyToken, readReaction);
 //Update
 router.put("/update/:reactionId", verifyToken, updateReaction);
 //Delete
 router.delete('/remove/:reactionId',verifyToken, removeReaction);
 
-router.param('reactionId', getReactionById)
+router.param('reactionId', getReactionById) */
 
 module.exports = router;

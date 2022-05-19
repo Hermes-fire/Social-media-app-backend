@@ -1,4 +1,4 @@
-const express = require("express");
+/* const express = require("express");
 const router = express.Router();
 
 const { verifyToken } = require("../controllers/auth");
@@ -17,4 +17,4 @@ router.delete('/remove/:reactionId',verifyToken, removeReaction);
 
 router.param('reactionId', getReactionById)
 
-module.exports = router;
+module.exports = router; */
