@@ -50,9 +50,9 @@ exports.getReactionById = (req, res, next, id) => {
 exports.readReaction = (req, res) => {
   return res.json(req.reaction);
 };
-/* 
+
 exports.updateReaction = async (req, res) => {
-  const reaction = new Reaction(req.reaction);
+  const reaction = new ReactionC(req.reaction);
   if(!req.body.reaction){
     return res.status(400).json({
       error: 'please specify a reaction',
@@ -74,7 +74,7 @@ exports.updateReaction = async (req, res) => {
   error: err,
   });
 }}
-
+/*
 exports.removeReaction = async (req, res) => {
   if(req.id != req.reaction.userId){
     return res.status(403).json({

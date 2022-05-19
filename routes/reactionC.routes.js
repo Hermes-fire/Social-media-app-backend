@@ -11,7 +11,7 @@ router.post("/addReaction", verifyToken, addReaction);
 //Read
 router.get("/read/:reactionId", verifyToken, readReaction);
 //Update
-//router.put("/update/:reactionId", verifyToken, updateReaction);
+router.put("/update/:reactionId", verifyToken, updateReaction);
 //Delete
 //router.delete('/remove/:reactionId',verifyToken, removeReaction);
 
