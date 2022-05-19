@@ -32,9 +32,10 @@ exports.addReaction = async (req, res) => {
     });
   }
 }
-/* 
+
 exports.getReactionById = (req, res, next, id) => {
-  Reaction.findById(id)
+  console.log('here')
+  ReactionC.findById(id)
     .exec((err, reaction) => {
       if(err || !reaction) {
           return res.status(400).json({
@@ -49,7 +50,7 @@ exports.getReactionById = (req, res, next, id) => {
 exports.readReaction = (req, res) => {
   return res.json(req.reaction);
 };
-
+/* 
 exports.updateReaction = async (req, res) => {
   const reaction = new Reaction(req.reaction);
   if(!req.body.reaction){
