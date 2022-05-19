@@ -13,7 +13,7 @@ router.get("/read/:reactionId", verifyToken, readReaction);
 //Update
 router.put("/update/:reactionId", verifyToken, updateReaction);
 //Delete
-//router.delete('/remove/:reactionId',verifyToken, removeReaction);
+router.delete('/remove/:reactionId',verifyToken, removeReaction);
 
 router.param('reactionId', getReactionById)
 

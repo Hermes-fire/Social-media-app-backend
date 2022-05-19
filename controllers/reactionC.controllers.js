@@ -74,7 +74,7 @@ exports.updateReaction = async (req, res) => {
   error: err,
   });
 }}
-/*
+
 exports.removeReaction = async (req, res) => {
   if(req.id != req.reaction.userId){
     return res.status(403).json({
@@ -82,19 +82,19 @@ exports.removeReaction = async (req, res) => {
       });
   }
   try{
-    const announcement = await Announcement.findOneAndUpdate(
-      {_id: req.reaction.postId}, //filter
+    const comment = await Comment.findOneAndUpdate(
+      {_id: req.reaction.commentId}, //filter
       { $pull: {reactions:req.reaction._id}}, //update
       {new: true} //option
     )
-    await Reaction.deleteOne({ _id: req.reaction._id})
+    await ReactionC.deleteOne({ _id: req.reaction._id})
     return res.status(200).json({
       msg: "removed",
-      announcement: announcement
+      announcement: comment
     })
   } catch(err) {
   return res.status(400).json({
   error: err,
   });
   }
-} */
+}
