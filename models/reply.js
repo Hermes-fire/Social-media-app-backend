@@ -19,7 +19,11 @@ const replySchema = new Schema({
         maxlength: 1000,
         required: true,
         trim: true,
-    }
+    },
+    reactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ReactionR'
+    }],
 },
 { timestamps: true }
 );
