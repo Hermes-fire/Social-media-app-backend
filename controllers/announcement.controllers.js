@@ -36,3 +36,50 @@ exports.getAllAnnouncements = async (req, res) => {
     });
   res.json(announcement);
 };
+
+//Get Announcement by Id middleware
+exports.getAnnoucementById = (req, res, next, id) => {
+  console.log('without')
+  Announcement.findById(id)
+    .exec((err, announcement)=>{
+      if(err || !announcement) {
+          return res.status(400).json({
+              error: 'annoucement not found'
+          })
+      }
+      req.announcement = announcement 
+      next()
+  })
+}
+
+exports.getAnnoucementByIdAndPopulate = (req, res, next, id) => {
+  console.log('with')
+  Announcement.findById(id)
+    .populate({
+      path: 'comments',
+      populate: {
+        path: 'replies',
+        model: 'Reply'
+      }
+    })
+    /* .populate('comments', '-postId -__v')
+    .populate('reactions', '-postId -__v') */
+    .exec((err, announcement)=>{
+      if(err || !announcement) {
+          return res.status(400).json({
+              error: 'annoucement not found'
+          })
+      }
+      req.announcement = announcement 
+      next()
+  })
+}
+//Return Announcement
+exports.readAnnouncement = (req, res) => {
+  return res.json(req.announcement);
+};
+
+//add new comment (check comment controller)
+
+
+
