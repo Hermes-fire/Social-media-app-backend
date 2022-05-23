@@ -28,7 +28,8 @@ exports.getAllAnnouncements = async (req, res) => {
   let order = req.query.order ? req.query.order : "desc";
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
   const announcement = await Announcement.find()
-    .populate(["categoryId", "userId"])
+    .populate("categoryId")
+    .populate('userId', '-hashed_password -salt')
     .sort([[sortBy, order]]);
   if (!announcement)
     return res.status(204).json({
@@ -39,7 +40,6 @@ exports.getAllAnnouncements = async (req, res) => {
 
 //Get Announcement by Id middleware
 exports.getAnnoucementById = (req, res, next, id) => {
-  console.log('without')
   Announcement.findById(id)
     .exec((err, announcement)=>{
       if(err || !announcement) {
