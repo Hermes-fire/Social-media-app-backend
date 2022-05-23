@@ -12,6 +12,8 @@ const {
   refreshToken,
   verifyToken,
   validate,
+  addNavbarData,
+  getNavbarData,
 } = require("../controllers/auth");
 const { userSignupValidator } = require("../validator");
 
@@ -38,8 +40,11 @@ router.get("/verifytoken", verifyToken, (req, res) => {
 router.post("/refreshtoken", refreshToken);
 
 //email validation
-router.get("/verify/:id/:token", validate)
+router.get("/verify/:id/:token", validate);
 
-
+//Add navbar data to db
+router.post("/navbarinfos", verifyToken, addNavbarData);
+//get navbar Data from db
+router.get("/navbarinfos", verifyToken, getNavbarData);
 
 module.exports = router;
