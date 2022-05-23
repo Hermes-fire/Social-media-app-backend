@@ -44,6 +44,7 @@ exports.getCommentById = (req, res, next, id) => {
 
 exports.getCommentByPostId = (req, res, next, id) => {
   Comment.find({postId: id})
+    .populate('reactions', '-postId -__v')
     .exec((err, comment) => {
       if(err || !comment) {
           return res.status(400).json({
