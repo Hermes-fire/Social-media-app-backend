@@ -30,6 +30,7 @@ exports.getAllAnnouncements = async (req, res) => {
   const announcement = await Announcement.find()
     .populate("categoryId")
     .populate('userId', '-hashed_password -salt')
+    .populate('reactions', '-postId -__v')
     .sort([[sortBy, order]]);
   if (!announcement)
     return res.status(204).json({
@@ -55,13 +56,7 @@ exports.getAnnoucementById = (req, res, next, id) => {
 exports.getAnnoucementByIdAndPopulate = (req, res, next, id) => {
   console.log('with')
   Announcement.findById(id)
-    .populate({
-      path: 'comments',
-      populate: {
-        path: 'replies',
-        model: 'Reply'
-      }
-    })
+    .populate('reactions', '-postId -__v')
     /* .populate('comments', '-postId -__v')
     .populate('reactions', '-postId -__v') */
     .exec((err, announcement)=>{

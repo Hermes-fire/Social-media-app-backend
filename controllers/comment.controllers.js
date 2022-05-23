@@ -1,7 +1,5 @@
 const Comment = require("../models/comment");
-const Announcement = require("../models/announcement");
-
-
+var ObjectId = require('mongoose').Types.ObjectId; 
 
 exports.create = async (req, res) => {
     const comment = new Comment(req.body);
@@ -22,12 +20,7 @@ exports.addComment = async (req, res) => {
   comment.userId = req.id
   try {
     const result = await comment.save();
-    const announcement = await Announcement.findOneAndUpdate(
-                                              {_id: result.postId}, //filter
-                                              { $push: {comments:result._id}}, //update
-                                              {new: true} //option
-                                          )
-    res.status(201).json({result,announcement});
+    res.status(201).json({result});
   }catch(err) {
     return res.status(400).json({
     error: err,
@@ -38,6 +31,19 @@ exports.addComment = async (req, res) => {
 
 exports.getCommentById = (req, res, next, id) => {
   Comment.findById(id)
+    .exec((err, comment) => {
+      if(err || !comment) {
+          return res.status(400).json({
+              error: 'comment not found'
+          })
+      }
+      req.comment = comment 
+      next()
+  })
+}
+
+exports.getCommentByPostId = (req, res, next, id) => {
+  Comment.find({postId: id})
     .exec((err, comment) => {
       if(err || !comment) {
           return res.status(400).json({
@@ -85,11 +91,6 @@ exports.removeComment = async (req, res) => {
       });
   }
   try{
-    const announcement = await Announcement.findOneAndUpdate(
-      {_id: req.comment.postId}, //filter
-      { $pull: {comments:req.comment._id}}, //update
-      {new: true} //option
-    )
     await Comment.deleteOne({ _id: req.comment._id})
     return res.status(200).json({
       msg: "removed",
