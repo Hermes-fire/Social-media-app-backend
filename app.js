@@ -13,6 +13,7 @@ const commentRoutes = require("./routes/comment.routes")
 const reactionRoutes = require("./routes/reaction.routes")
 const replyRoutes = require("./routes/reply.routes")
 const reactionCRoutes = require("./routes/reactionC.routes")
+const reactionRRoutes = require("./routes/reactionR.routes")
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
@@ -39,5 +40,6 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/comment/reply", replyRoutes);
 // Reactions
 app.use("/api/reaction", reactionRoutes);
-app.use("/api/reactionC", reactionCRoutes);
+app.use("/api/reactionC", reactionCRoutes); //comment reaction
+app.use("/api/reactionR", reactionRRoutes); //reply reaction
 //app.use("/api/reactionR", reactionRoutes);

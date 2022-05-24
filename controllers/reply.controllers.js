@@ -37,6 +37,7 @@ exports.addReply = async (req, res) => {
 
 exports.getReplyById = (req, res, next, id) => {
   Reply.findById(id)
+    .populate('reactions', '-postId -commentId -__v -replyId"')
     .exec((err, reply) => {
       if(err || !reply) {
           return res.status(400).json({
