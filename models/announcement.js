@@ -27,6 +27,14 @@ const announcementSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment'
+    }],
+    reactions: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Reaction'
+    }],
   },
   { timestamps: true }
 );
