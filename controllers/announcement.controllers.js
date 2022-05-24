@@ -28,7 +28,9 @@ exports.getAllAnnouncements = async (req, res) => {
   let order = req.query.order ? req.query.order : "desc";
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
   const announcement = await Announcement.find()
-    .populate(["categoryId", "userId"])
+    .populate("categoryId")
+    .populate('userId', '-hashed_password -salt')
+    .populate('reactions', '-postId -__v')
     .sort([[sortBy, order]]);
   if (!announcement)
     return res.status(204).json({
@@ -39,7 +41,6 @@ exports.getAllAnnouncements = async (req, res) => {
 
 //Get Announcement by Id middleware
 exports.getAnnoucementById = (req, res, next, id) => {
-  console.log('without')
   Announcement.findById(id)
     .exec((err, announcement)=>{
       if(err || !announcement) {
@@ -55,13 +56,7 @@ exports.getAnnoucementById = (req, res, next, id) => {
 exports.getAnnoucementByIdAndPopulate = (req, res, next, id) => {
   console.log('with')
   Announcement.findById(id)
-    .populate({
-      path: 'comments',
-      populate: {
-        path: 'replies',
-        model: 'Reply'
-      }
-    })
+    .populate('reactions', '-postId -__v')
     /* .populate('comments', '-postId -__v')
     .populate('reactions', '-postId -__v') */
     .exec((err, announcement)=>{

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { verifyToken } = require("../controllers/auth");
-const {create, addComment, getCommentById, readComment, updateComment, removeComment} = require("../controllers/comment.controllers")
+const {create, addComment, getCommentById, getCommentByPostId, readComment, updateComment, removeComment} = require("../controllers/comment.controllers")
 
 //----CRUD----
 //Create
@@ -10,11 +10,14 @@ router.post("/create", verifyToken, create);
 router.post("/addComment", verifyToken, addComment);
 //Read
 router.get("/read/:commentId", verifyToken, readComment);
+router.get("/getCommentByPostId/:postId", verifyToken, readComment);
 //Update
 router.put("/update/:commentId", verifyToken, updateComment);
 //Delete
 router.delete('/remove/:commentId',verifyToken, removeComment)
 
 router.param('commentId', getCommentById)
+router.param('postId', getCommentByPostId)
+
 
 module.exports = router;

@@ -18,7 +18,7 @@ const commentSchema = new Schema({
     },
     reactions: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Reaction'
+      ref: 'ReactionC'
     }],
     replies: [{
         type: Schema.Types.ObjectId,
