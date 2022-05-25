@@ -19,6 +19,9 @@ exports.addReaction = async (req, res) => {
   const reaction = new Reaction(req.body);
   reaction.userId = req.id
   try {
+    //add this check - ( user can have only one reaction)
+    // find reaction with postId and userId
+    // If exist return "user already reacted to this post"
     const result = await reaction.save();
     const announcement = await Announcement.findOneAndUpdate(
                                               {_id: result.postId}, //filter
