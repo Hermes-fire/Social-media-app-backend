@@ -49,11 +49,12 @@ exports.getReactionById = (req, res, next, id) => {
   })
 }
 
+
 exports.readReaction = (req, res) => {
   return res.json(req.reaction);
 };
 
-exports.updateReaction = async (req, res) => {
+exports.updateReaction_old = async (req, res) => {
   const reaction = new Reaction(req.reaction);
   if(!req.body.reaction){
     return res.status(400).json({
@@ -77,7 +78,27 @@ exports.updateReaction = async (req, res) => {
   });
 }}
 
-exports.removeReaction = async (req, res) => {
+
+exports.updateReaction = async (req, res) => {
+  if(!req.body.userId || !req.body.postId){
+    return res.status(400).json({error: 'userId ? postId ?'});
+  }
+  try{
+    const updt = await Reaction.findOneAndUpdate({"userId": req.body.userId, "postId": req.body.postId},//filter
+                                                  {reaction: req.body.reaction})//update)
+    return res.status(200).json({
+      error: "updated",
+    })
+  }
+  catch(err){
+    return res.status(400).json({
+      error: err,
+    });
+  }
+  } 
+
+
+exports.removeReaction_old = async (req, res) => {
   if(req.id != req.reaction.userId){
     return res.status(403).json({
       error: 'unauthorized',
@@ -94,6 +115,29 @@ exports.removeReaction = async (req, res) => {
       msg: "removed",
       announcement: announcement
     })
+  } catch(err) {
+  return res.status(400).json({
+  error: err,
+  });
+  }
+}
+
+
+exports.removeReaction = async (req, res) => {
+  try{
+    if(!req.body.userId || !req.body.postId){
+      return res.status(400).json({error: 'userId ? postId ?'});
+    }
+    Reaction.findOneAndDelete({"userId": req.body.userId, "postId": req.body.postId}).exec((err,reac)=>{
+      if(err){
+        return res.status(400).json({
+          error: err,
+        });}
+        return res.status(200).json({
+          msg: "removed",
+        })
+    })
+    
   } catch(err) {
   return res.status(400).json({
   error: err,
