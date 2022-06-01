@@ -9,11 +9,11 @@ const variables = require("./config/variables");
 const authRoutes = require("./routes/auth");
 const announcementRoutes = require("./routes/announcement.routes");
 const categoryRoutes = require("./routes/category.routes");
-const commentRoutes = require("./routes/comment.routes")
-const reactionRoutes = require("./routes/reaction.routes")
-const replyRoutes = require("./routes/reply.routes")
-const reactionCRoutes = require("./routes/reactionC.routes")
-const reactionRRoutes = require("./routes/reactionR.routes")
+const commentRoutes = require("./routes/comment.routes");
+const reactionRoutes = require("./routes/reaction.routes");
+const replyRoutes = require("./routes/reply.routes");
+const reactionCRoutes = require("./routes/reactionC.routes");
+const reactionRRoutes = require("./routes/reactionR.routes");
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
