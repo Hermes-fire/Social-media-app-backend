@@ -58,7 +58,8 @@ exports.getCommentByPostId = (req, res, next, id) => {
     req.postId = id
     req.count = count 
     Comment.find({ "postId": id, "_id": { "$nin": req.body.seenIds }})
-      .limit(3)
+      .sort({createdAt: 'desc'})
+      .limit(2)
       .populate('reactions', '-postId -commentId -__v')
       .populate('replies', '-postId -commentId  -__v')
       .populate('userId', '-email -hashed_password -salt -verified -createdAt -updatedAt -__v')
