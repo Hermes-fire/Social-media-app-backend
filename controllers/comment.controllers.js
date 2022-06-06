@@ -28,9 +28,9 @@ exports.addComment = async (req, res) => {
   }
 }
 
-
 exports.getCommentById = (req, res, next, id) => {
   Comment.findById(id)
+    .populate('userId', '-email -hashed_password -salt -verified -createdAt -updatedAt -__v')
     .exec((err, comment) => {
       if(err || !comment) {
           return res.status(400).json({
@@ -41,6 +41,7 @@ exports.getCommentById = (req, res, next, id) => {
       next()
   })
 }
+
 exports.getCommentByPostId = (req, res, next, id) => {
   Comment.count({ "postId": id})
   .exec((err, count) => {
@@ -57,9 +58,11 @@ exports.getCommentByPostId = (req, res, next, id) => {
     req.postId = id
     req.count = count 
     Comment.find({ "postId": id, "_id": { "$nin": req.body.seenIds }})
-      .limit(3)
+      .sort({createdAt: 'desc'})
+      .limit(2)
       .populate('reactions', '-postId -commentId -__v')
       .populate('replies', '-postId -commentId  -__v')
+      .populate('userId', '-email -hashed_password -salt -verified -createdAt -updatedAt -__v')
       .exec((err, comment) => {
         if(err || !comment) {
             return res.status(200).json({
