@@ -1,4 +1,5 @@
 const express = require("express");
+const { createServer } = require("http");
 const app = express();
 const mongoose = require("mongoose");
 const morgan = require("morgan");
@@ -15,10 +16,26 @@ const replyRoutes = require("./routes/reply.routes");
 const reactionCRoutes = require("./routes/reactionC.routes");
 const reactionRRoutes = require("./routes/reactionR.routes");
 
+// Solution 1
+// Socket io implementation
+const { Server } = require("socket.io");
+const httpServer = createServer(app);
+// To reach this server only inside our front app
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+//solution 2
+// const server = require("http").createServer(app);
+// const io = require("socket.io")(server);
+
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
 const port = variables.port || 8000;
-app.listen(port, () => {
+
+httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}, waiting db to connect`);
 });
 
@@ -43,3 +60,52 @@ app.use("/api/reaction", reactionRoutes);
 app.use("/api/reactionC", reactionCRoutes); //comment reaction
 app.use("/api/reactionR", reactionRRoutes); //reply reaction
 //app.use("/api/reactionR", reactionRoutes);
+
+// Socket io functions
+
+let onlineUsers = [];
+
+// Add a new user to onlineUsers array
+const addNewUser = (userId, socketId, fname, lname, profilePicture) => {
+  !onlineUsers.some((user) => user.userId === userId) &&
+    onlineUsers.push({ userId, socketId, fname, lname, profilePicture });
+};
+
+// Remove a user from onlineUsers array
+const removeUser = (socketId) => {
+  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+};
+
+//  find a userId inside onlineUsers array
+const getUser = (userId) => {
+  return onlineUsers.find((user) => user.userId === userId);
+};
+
+// Run when a client connects
+io.on("connection", (socket) => {
+  console.log("someone has connected...");
+
+  // Add a new user to onlineUsers array
+  socket.on("addUser", (user) => {
+    console.log("user", user);
+    addNewUser(
+      user.userId,
+      socket.id,
+      user.fname,
+      user.lname,
+      user.profilePicture
+    );
+  });
+
+  // Send onlineUsersList
+  io.emit("sendOnlineUsersList", onlineUsers);
+
+  console.log("onlineUsers : ", onlineUsers);
+
+  socket.on("disconnect", () => {
+    // Remove a user from onlineUsers array
+    // When closing the browser it will remove the user
+    removeUser(socket.id);
+    console.log("someone has left!");
+  });
+});
