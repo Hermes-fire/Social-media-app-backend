@@ -20,16 +20,12 @@ const reactionRRoutes = require("./routes/reactionR.routes");
 // Socket io implementation
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
-// To reach this server only inside our front app
+// To handle the "cors" and also to reach this server only inside our front app
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
   },
 });
-
-//solution 2
-// const server = require("http").createServer(app);
-// const io = require("socket.io")(server);
 
 //db connection
 mongoose.connect(variables.MONGO_URI).then(() => console.log("DB Connected"));
@@ -84,12 +80,13 @@ const getUser = (userId) => {
 // Run when a client connects
 io.on("connection", (socket) => {
   console.log("someone has connected...");
-
+  console.log("socket id:", socket.id);
   // Add a new user to onlineUsers array
   socket.on("addUser", (user) => {
-    console.log("user", user);
+    // console.log("user", user);
+
     addNewUser(
-      user.userId,
+      user._id,
       socket.id,
       user.fname,
       user.lname,
@@ -97,12 +94,13 @@ io.on("connection", (socket) => {
     );
   });
 
-  // Send onlineUsersList
-  io.emit("sendOnlineUsersList", onlineUsers);
-
   console.log("onlineUsers : ", onlineUsers);
 
+  // Send onlineUsersList to all users including me
+  io.emit("sendOnlineUsersList", onlineUsers);
+
   socket.on("disconnect", () => {
+    console.log("socket id:", socket.id);
     // Remove a user from onlineUsers array
     // When closing the browser it will remove the user
     removeUser(socket.id);
