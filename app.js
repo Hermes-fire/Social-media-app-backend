@@ -62,8 +62,8 @@ app.use("/api/reactionR", reactionRRoutes); //reply reaction
 let onlineUsers = [];
 
 // Add a new user to onlineUsers array
-const addNewUser = (userId, socketId, fname, lname, profilePicture) => {
-  !onlineUsers.some((user) => user.userId === userId) &&
+const  addNewUser = (userId, socketId, fname, lname, profilePicture) => {
+  /* !onlineUsers.some((user) => user.userId === userId) && */
     onlineUsers.push({ userId, socketId, fname, lname, profilePicture });
 };
 
@@ -81,10 +81,9 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
   console.log("someone has connected...");
   console.log("socket id:", socket.id);
-  // Add a new user to onlineUsers array
+   // Add a new user to onlineUsers array
   socket.on("addUser", (user) => {
-    // console.log("user", user);
-
+    console.log("user", user);
     addNewUser(
       user._id,
       socket.id,
@@ -92,18 +91,18 @@ io.on("connection", (socket) => {
       user.lname,
       user.profilePicture
     );
+    console.log("onlineUsers inside : ", onlineUsers);
+    // Send onlineUsersList to all users including me
+    io.emit("sendOnlineUsersList", {array: onlineUsers});
   });
 
-  console.log("onlineUsers : ", onlineUsers);
-
-  // Send onlineUsersList to all users including me
-  io.emit("sendOnlineUsersList", onlineUsers);
-
+  
   socket.on("disconnect", () => {
     console.log("socket id:", socket.id);
     // Remove a user from onlineUsers array
     // When closing the browser it will remove the user
     removeUser(socket.id);
     console.log("someone has left!");
-  });
+    io.emit("sendOnlineUsersList", {array: onlineUsers});
+  }); 
 });
