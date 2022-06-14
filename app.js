@@ -53,7 +53,7 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/comment/reply", replyRoutes);
 // Reactions
 app.use("/api/reaction", reactionRoutes);
-app.use("/api/reactionC", reactionCRoutes); //comment reaction
+app.use("/api/reactionc", reactionCRoutes); //comment reaction
 app.use("/api/reactionR", reactionRRoutes); //reply reaction
 //app.use("/api/reactionR", reactionRoutes);
 
