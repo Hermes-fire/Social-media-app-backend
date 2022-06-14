@@ -63,7 +63,7 @@ let onlineUsers = [];
 
 // Add a new user to onlineUsers array
 const  addNewUser = (userId, socketId, fname, lname, profilePicture) => {
-  /* !onlineUsers.some((user) => user.userId === userId) && */
+   !onlineUsers.some((user) => user.userId === userId) && 
     onlineUsers.push({ userId, socketId, fname, lname, profilePicture });
 };
 
