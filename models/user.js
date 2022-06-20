@@ -39,6 +39,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    jobTitle: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      trim: true,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
   },
   { timestamps: true, _id: false }
 );
