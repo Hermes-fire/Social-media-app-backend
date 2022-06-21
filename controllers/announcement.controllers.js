@@ -46,7 +46,11 @@ exports.getAllAnnouncements = async (req, res) => {
 
     // get total documents in the announcements collection
     const count = await Announcement.countDocuments();
-
+    announcement.forEach(item => {
+      if (item.anIsAnonymous === true){
+        item.userId = undefined
+      }
+    })
     // return response with this.getAllAnnouncements, total pages and current page
     res.json({
       announcement,
