@@ -35,8 +35,6 @@ exports.updateUser = async (req, res) => {
       error: "unauthorized",
     });
   }
-  // userId: monaim : 6273abee8d9e8b8a1cec4897
-  // userId: younes : 6272ba693395f9480da8065c
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
