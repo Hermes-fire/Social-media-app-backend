@@ -94,7 +94,7 @@ exports.updateComment = async (req, res) => {
       });
   }
   //check if user own comment
-  if(req.id != req.comment.userId){
+  if(req.id != req.comment.userId._id){
     return res.status(403).json({
       error: 'unauthorized',
       });
@@ -102,7 +102,7 @@ exports.updateComment = async (req, res) => {
   try{
     await comment.updateOne({comment: req.body.comment})
     return res.json({
-      msg: "updated"
+      msg: "updated",
     })
   } catch(err) {
   return res.status(400).json({
@@ -111,7 +111,7 @@ exports.updateComment = async (req, res) => {
 }}
 
 exports.removeComment = async (req, res) => {
-  if(req.id != req.comment.userId){
+  if(req.id != req.comment.userId._id){
     return res.status(403).json({
       error: 'unauthorized',
       });
@@ -120,7 +120,6 @@ exports.removeComment = async (req, res) => {
     await Comment.deleteOne({ _id: req.comment._id})
     return res.status(200).json({
       msg: "removed",
-      announcement: announcement
     })
   } catch(err) {
   return res.status(400).json({

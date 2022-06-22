@@ -11,14 +11,17 @@ const {
 const { verifyToken } = require("../controllers/auth");
 
 // create announcement
-router.post("/announcements/create", verifyToken, create);
+router.post("/", verifyToken, create);
 // Get all announcement
-router.get("/announcements/", verifyToken, getAllAnnouncements);
+router.get("/", verifyToken, getAllAnnouncements);
+
+
+
 
 // Get annoucement by Id
-router.get("/announcements/:announcementId", verifyToken, readAnnouncement);
+router.get("/:announcementId", verifyToken, readAnnouncement);
 // Get annoucement by Id and populate
-router.get("/announcements/populate/:announcementIdAndPopulate", verifyToken, readAnnouncement);
+router.get("/populate/:announcementIdAndPopulate", verifyToken, readAnnouncement);
 
 
 router.param('announcementId', getAnnoucementById)

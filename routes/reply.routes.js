@@ -7,7 +7,7 @@ const {create, addReply, getReplyById, readReply, updateReply, removeReply} = re
 
 //----CRUD----
 //Create
-router.post("/create", verifyToken, create);
+//router.post("/create", verifyToken, create);
 router.post("/addReply", verifyToken, addReply);
 //Read
 router.get("/read/:replyId", verifyToken, readReply);

@@ -45,16 +45,16 @@ app.use(cors());
 // Auth
 app.use("/api/auth", authRoutes);
 // Announcement
-app.use("/api", announcementRoutes);
+app.use("/api/announcements", announcementRoutes);
 // Post Category
-app.use("/api", categoryRoutes);
+app.use("/api/categories", categoryRoutes);
 // Comments
-app.use("/api/comment", commentRoutes);
-app.use("/api/comment/reply", replyRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/replies", replyRoutes);
 // Reactions
-app.use("/api/reaction", reactionRoutes);
+app.use("/api/reactions", reactionRoutes);
 app.use("/api/reactionc", reactionCRoutes); //comment reaction
-app.use("/api/reactionR", reactionRRoutes); //reply reaction
+app.use("/api/reactionR", reactionRRoutes); //replies reaction
 //app.use("/api/reactionR", reactionRoutes);
 
 // Socket io functions
