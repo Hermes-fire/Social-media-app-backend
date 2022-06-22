@@ -53,8 +53,10 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/replies", replyRoutes);
 // Reactions
 app.use("/api/reactions", reactionRoutes);
-app.use("/api/reactionc", reactionCRoutes); //comment reaction
-app.use("/api/reactionR", reactionRRoutes); //replies reaction
+//comments reactions
+app.use("/api/reactionsC", reactionCRoutes); 
+//replies reactions
+app.use("/api/reactionsR", reactionRRoutes); 
 //app.use("/api/reactionR", reactionRoutes);
 
 // Socket io functions
