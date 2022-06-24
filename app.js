@@ -46,7 +46,7 @@ app.use(cors());
 // Auth
 app.use("/api/auth", authRoutes);
 // User
-app.use("/api/users", userRoutes);
+app.use("/api/v1/users", userRoutes);
 // Announcement
 app.use("/api", announcementRoutes);
 // Post Category
