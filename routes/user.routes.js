@@ -7,6 +7,7 @@ const {
   updateUser,
   removeUser,
   getUserById,
+  renewPassword,
 } = require("../controllers/user.controllers");
 
 //----CRUD----
@@ -15,6 +16,9 @@ const {
 router.get("/:userid", verifyToken, readUser);
 //Update
 router.put("/:userid", verifyToken, updateUser);
+
+// Renew password
+router.put("/password/:userid", verifyToken, renewPassword);
 
 //Delete
 router.delete("/:userid", verifyToken, removeUser);
