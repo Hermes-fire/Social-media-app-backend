@@ -39,6 +39,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    jobTitle: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      trim: true,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
   },
   { timestamps: true, _id: false }
 );
@@ -47,6 +58,7 @@ const userSchema = new mongoose.Schema(
 userSchema
   .virtual("password")
   .set(function (password) {
+    console.log("virtual password", password);
     this._password = password;
     this.salt = uuidv1();
     this.hashed_password = this.encryptPassword(password);

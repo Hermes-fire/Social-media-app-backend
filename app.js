@@ -16,6 +16,7 @@ const replyRoutes = require("./routes/reply.routes");
 const reactionCRoutes = require("./routes/reactionC.routes");
 const reactionRRoutes = require("./routes/reactionR.routes");
 const navlinksRoutes = require("./routes/navlinks.routes")
+const userRoutes = require("./routes/user.routes");
 
 // Solution 1
 // Socket io implementation
@@ -45,6 +46,8 @@ app.use(cors());
 //=== routes ===
 // Auth
 app.use("/api/auth", authRoutes);
+// User
+app.use("/api/v1/users", userRoutes);
 // Announcement
 app.use("/api/announcements", announcementRoutes);
 // Post Category
@@ -65,8 +68,8 @@ app.use("/api/navlinks", navlinksRoutes);
 let onlineUsers = [];
 
 // Add a new user to onlineUsers array
-const  addNewUser = (userId, socketId, fname, lname, profilePicture) => {
-   !onlineUsers.some((user) => user.userId === userId) && 
+const addNewUser = (userId, socketId, fname, lname, profilePicture) => {
+  !onlineUsers.some((user) => user.userId === userId) &&
     onlineUsers.push({ userId, socketId, fname, lname, profilePicture });
 };
 
@@ -84,7 +87,7 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
   console.log("someone has connected...");
   console.log("socket id:", socket.id);
-   // Add a new user to onlineUsers array
+  // Add a new user to onlineUsers array
   socket.on("addUser", (user) => {
     console.log("user", user);
     addNewUser(
@@ -96,16 +99,15 @@ io.on("connection", (socket) => {
     );
     console.log("onlineUsers inside : ", onlineUsers);
     // Send onlineUsersList to all users including me
-    io.emit("sendOnlineUsersList", {array: onlineUsers});
+    io.emit("sendOnlineUsersList", { array: onlineUsers });
   });
 
-  
   socket.on("disconnect", () => {
     console.log("socket id:", socket.id);
     // Remove a user from onlineUsers array
     // When closing the browser it will remove the user
     removeUser(socket.id);
     console.log("someone has left!");
-    io.emit("sendOnlineUsersList", {array: onlineUsers});
-  }); 
+    io.emit("sendOnlineUsersList", { array: onlineUsers });
+  });
 });
