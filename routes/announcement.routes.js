@@ -14,10 +14,6 @@ const { verifyToken } = require("../controllers/auth");
 router.post("/", verifyToken, create);
 // Get all announcement
 router.get("/", verifyToken, getAllAnnouncements);
-
-
-
-
 // Get annoucement by Id
 router.get("/:announcementId", verifyToken, readAnnouncement);
 // Get annoucement by Id and populate

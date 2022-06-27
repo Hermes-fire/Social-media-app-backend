@@ -15,6 +15,7 @@ const reactionRoutes = require("./routes/reaction.routes");
 const replyRoutes = require("./routes/reply.routes");
 const reactionCRoutes = require("./routes/reactionC.routes");
 const reactionRRoutes = require("./routes/reactionR.routes");
+const navlinksRoutes = require("./routes/navlinks.routes")
 
 // Solution 1
 // Socket io implementation
@@ -57,10 +58,10 @@ app.use("/api/reactions", reactionRoutes);
 app.use("/api/reactionsC", reactionCRoutes); 
 //replies reactions
 app.use("/api/reactionsR", reactionRRoutes); 
-//app.use("/api/reactionR", reactionRoutes);
+//navigation links for navbar
+app.use("/api/navlinks", navlinksRoutes); 
 
 // Socket io functions
-
 let onlineUsers = [];
 
 // Add a new user to onlineUsers array
