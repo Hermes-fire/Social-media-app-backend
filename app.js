@@ -15,6 +15,7 @@ const reactionRoutes = require("./routes/reaction.routes");
 const replyRoutes = require("./routes/reply.routes");
 const reactionCRoutes = require("./routes/reactionC.routes");
 const reactionRRoutes = require("./routes/reactionR.routes");
+const navlinksRoutes = require("./routes/navlinks.routes")
 const userRoutes = require("./routes/user.routes");
 
 // Solution 1
@@ -48,20 +49,22 @@ app.use("/api/auth", authRoutes);
 // User
 app.use("/api/v1/users", userRoutes);
 // Announcement
-app.use("/api", announcementRoutes);
+app.use("/api/announcements", announcementRoutes);
 // Post Category
-app.use("/api", categoryRoutes);
+app.use("/api/categories", categoryRoutes);
 // Comments
-app.use("/api/comment", commentRoutes);
-app.use("/api/comment/reply", replyRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/replies", replyRoutes);
 // Reactions
-app.use("/api/reaction", reactionRoutes);
-app.use("/api/reactionc", reactionCRoutes); //comment reaction
-app.use("/api/reactionR", reactionRRoutes); //reply reaction
-//app.use("/api/reactionR", reactionRoutes);
+app.use("/api/reactions", reactionRoutes);
+//comments reactions
+app.use("/api/reactionsC", reactionCRoutes); 
+//replies reactions
+app.use("/api/reactionsR", reactionRRoutes); 
+//navigation links for navbar
+app.use("/api/navlinks", navlinksRoutes); 
 
 // Socket io functions
-
 let onlineUsers = [];
 
 // Add a new user to onlineUsers array

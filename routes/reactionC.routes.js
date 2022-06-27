@@ -13,14 +13,14 @@ const {
 
 //----CRUD----
 //Create
-router.post("/create", verifyToken, create);
-router.post("/addreaction", verifyToken, addReaction);
+//router.post("/create", verifyToken, create);
+router.post("/", verifyToken, addReaction);
 //Read
-router.get("/read/:reactionId", verifyToken, readReaction);
+router.get("/:reactionId", verifyToken, readReaction);
 //Update
-router.put("/update/", verifyToken, updateReaction);
+router.put("/", verifyToken, updateReaction);
 //Delete
-router.delete("/remove/", verifyToken, removeReaction);
+router.delete("/", verifyToken, removeReaction);
 
 router.param("reactionId", getReactionById);
 

@@ -6,16 +6,16 @@ const {create, addReaction, getReactionById, readReaction, updateReaction, remov
 
 //----CRUD----
 //Create
-router.post("/create", verifyToken, create);
-router.post("/addReaction", verifyToken, addReaction);
+//router.post("/create", verifyToken, create);
+router.post("/", verifyToken, addReaction);
 
 //Read
-router.get("/read/:reactionId", verifyToken, readReaction);
+router.get("/:reactionId", verifyToken, readReaction);
 //Update
-router.put("/update/:reactionId", verifyToken, updateReaction);
+router.put("/:reactionId", verifyToken, updateReaction);
 
 //Delete
-router.delete('/remove/:reactionId',verifyToken, removeReaction);
+router.delete('/:reactionId',verifyToken, removeReaction);
 
 router.param('reactionId', getReactionById)
 

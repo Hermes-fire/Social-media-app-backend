@@ -7,14 +7,14 @@ const {create, addReply, getReplyById, readReply, updateReply, removeReply} = re
 
 //----CRUD----
 //Create
-router.post("/create", verifyToken, create);
-router.post("/addReply", verifyToken, addReply);
+//router.post("/create", verifyToken, create);
+router.post("/", verifyToken, addReply);
 //Read
-router.get("/read/:replyId", verifyToken, readReply);
+router.get("/:replyId", verifyToken, readReply);
 //Update
-router.put("/update/:replyId", verifyToken, updateReply);
+router.put("/:replyId", verifyToken, updateReply);
 //Delete
-router.delete('/remove/:replyId', verifyToken, removeReply);
+router.delete('/:replyId', verifyToken, removeReply);
 
 
 

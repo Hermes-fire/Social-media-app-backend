@@ -8,9 +8,8 @@ const {
 } = require("../controllers/category.controllers");
 
 // create category
-router.post("/categories/create", verifyToken, create);
-
+router.post("/", verifyToken, create);
 // Get all categories
-router.get("/categories/", verifyToken, getAllCategories);
+router.get("/", verifyToken, getAllCategories);
 
 module.exports = router;

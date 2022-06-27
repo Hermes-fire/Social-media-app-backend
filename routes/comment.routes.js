@@ -7,15 +7,15 @@ const {create, addComment, getCommentById, getCommentByPostId,
 
 //----CRUD----
 //Create
-router.post("/create", verifyToken, create);
-router.post("/addComment", verifyToken, addComment);
+//router.post("/create", verifyToken, create);
+router.post("/", verifyToken, addComment);
 //Read
-router.get("/read/:commentId", verifyToken, readComment);
-router.post("/getCommentByPostId/:postId", verifyToken, readComment); //send post seensIds to get comment
+router.get("/:commentId", verifyToken, readComment);
+router.post("/:postId", verifyToken, readComment); //send post seensIds to get comment
 //Update
-router.put("/update/:commentId", verifyToken, updateComment);
+router.put("/:commentId", verifyToken, updateComment);
 //Delete
-router.delete('/remove/:commentId',verifyToken, removeComment)
+router.delete('/:commentId',verifyToken, removeComment)
 
 router.param('commentId', getCommentById)
 router.param('postId', getCommentByPostId)

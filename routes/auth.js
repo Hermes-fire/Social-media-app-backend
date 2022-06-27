@@ -42,9 +42,4 @@ router.post("/refreshtoken", refreshToken);
 //email validation
 router.get("/verify/:id/:token", validate);
 
-//Add navbar data to db
-router.post("/navbarinfos", verifyToken, addNavbarData);
-//get navbar Data from db
-router.get("/navbarinfos", verifyToken, getNavbarData);
-
 module.exports = router;
